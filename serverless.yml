@@ -1,0 +1,21 @@
+service: aws-nodejs
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: eu-west-1
+package:
+ include:
+    - handler.ts
+ exclude:
+    - node_modules/**/*
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline

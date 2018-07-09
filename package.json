@@ -1,0 +1,17 @@
+{
+	"name": "currency-converter-server",
+	"version": "0.0.1",
+	"main": "index.js",
+	"author": "radovan.fekec@gmail.com",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/aws-lambda": "^8.10.7",
+		"serverless": "^1.28.0",
+		"serverless-offline": "^3.25.6",
+		"serverless-plugin-typescript": "^1.1.5"
+	},
+	"dependencies": {},
+	"scripts": {
+		"dev": "serverless offline start"
+	}
+}
