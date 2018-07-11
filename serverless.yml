@@ -1,21 +1,52 @@
-service: aws-nodejs
+service: currency-converter
 provider:
   name: aws
   runtime: nodejs6.10
-  stage: dev
   region: eu-west-1
-package:
- include:
-    - handler.ts
- exclude:
-    - node_modules/**/*
 functions:
-  hello:
-    handler: handler.hello
+  convert:
+    handler: handler.convert
     events:
       - http:
-          path: hello
+          path: convert
+          method: post
+          documentation:
+            summary: summary
+            description: description
+            requestBody:
+              description: description
+            requestModels:
+              application/json: ConvertRequest
+          reqValidatorName: ConvertRequestValidator
+  currencies:
+    handler: handler.currencies
+    events:
+      - http:
+          path: currencies
           method: get
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
+custom:
+  documentation:
+    api:
+      info:
+        version: v0.0.1
+        title: test
+        description: desc
+    models:
+      - name: ConvertRequest
+        contentType: application/json
+        schema: ${file(models/ConvertRequestSchema.json)}
+resources:
+  Resources:
+    ConvertRequestValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: convert-request-validator
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false

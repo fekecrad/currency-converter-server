@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "es6",
 		"module": "commonjs",
-		"lib": ["es6"],
+		"lib": ["es7", "dom"],
 		"allowJs": true,
 		"sourceMap": true,
 		"rootDir": "./src",
@@ -12,9 +12,11 @@
 		"strictFunctionTypes": true,
 		"noImplicitThis": true,
 		"noUnusedLocals": true,
-		"noUnusedParameters": true,
+		"noUnusedParameters": false, //bcs. of unused params in handlers
 		"noImplicitReturns": true,
 		"moduleResolution": "node",
-		"esModuleInterop": true
-	}
+		"esModuleInterop": true,
+		"resolveJsonModule": true
+	},
+	"exclude": ["node_modules"]
 }
