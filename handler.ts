@@ -1,20 +1,16 @@
-import { Handler, Context, Callback } from 'aws-lambda';
+import { Callback, Context, Handler } from 'aws-lambda';
 
-interface HelloResponse {
-	statusCode: number;
-	body: string;
+import { executeConversionSteps, getCurrencies} from './src';
+
+export const convert: Handler = async (event: any, context: Context, callback: Callback) => {
+	const requestBody = JSON.parse(event.body);
+	callback(null, await executeConversionSteps(
+		requestBody.value,
+		requestBody.from,
+		requestBody.to
+	));
 };
 
-const hello: Handler = (event: any, context: Context, callback: Callback) => {
-	const response: HelloResponse = {
-		statusCode: 200,
-		body: JSON.stringify({
-			message: 'Go Serverless v1.0! Your function executed successfully!',
-			input: event,
-		}),
-	};
-
-	callback(null, response);
+export const currencies: Handler = async (event: any, context: Context, callback: Callback) => {
+	callback(null, getCurrencies());
 };
-
-export { hello };
