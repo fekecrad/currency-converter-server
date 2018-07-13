@@ -10,9 +10,8 @@ export interface ConversionMetadataResult {
 	totalRequests: number;
 }
 
-export interface ConversionResult {
-	result: number,
-	metadata: ConversionMetadataResult;
+export interface ConversionResult extends ConversionMetadataResult{
+	result: number
 }
 
 export interface Currency {

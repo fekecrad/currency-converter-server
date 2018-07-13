@@ -20,18 +20,18 @@ functions:
           path: convert
           method: post
           documentation:
-            summary: summary
-            description: description
+            summary: Convert endpoint
+            description: Documentation & naming is hard
             requestBody:
-              description: description
+              description: Parameters needed for conversion
             requestModels:
               application/json: ConvertRequest
           reqValidatorName: ConvertRequestValidator
-  currencies:
-    handler: handler.currencies
+  metadata:
+    handler: handler.metadata
     events:
       - http:
-          path: currencies
+          path: metadata
           method: get
 plugins:
   - serverless-dynamodb-local

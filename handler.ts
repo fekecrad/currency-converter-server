@@ -1,6 +1,6 @@
 import { Callback, Context, Handler } from 'aws-lambda';
 
-import { executeConversionSteps, getCurrencies} from './src';
+import { executeConversionSteps, getMetadata} from './src';
 
 export const convert: Handler = async (event: any, context: Context, callback: Callback) => {
 	const requestBody = JSON.parse(event.body);
@@ -11,6 +11,6 @@ export const convert: Handler = async (event: any, context: Context, callback: C
 	));
 };
 
-export const currencies: Handler = async (event: any, context: Context, callback: Callback) => {
-	callback(null, getCurrencies());
+export const metadata: Handler = async (event: any, context: Context, callback: Callback) => {
+	callback(null, await getMetadata());
 };

@@ -14,7 +14,7 @@ export const processMetadata =  async (
 	currentConversionInUsd: number,
 	currentDestinationCurrency: string
 ): Promise<ConversionMetadataResult> => {	
-	let metadataEntity: ConversionMetadataEntity | null = await getMetadata();
+	let metadataEntity: ConversionMetadataEntity | null = await getMetadataItem();
 
 	if (!metadataEntity) {
 		metadataEntity = {
@@ -25,7 +25,7 @@ export const processMetadata =  async (
 			}
 		};
 
-		await insertMetadata(metadataEntity);
+		await insertMetadataItem(metadataEntity);
 	} else {
 		metadataEntity.totalRequests++;
 		metadataEntity.totalAmount += currentConversionInUsd;
@@ -36,7 +36,7 @@ export const processMetadata =  async (
 			metadataEntity.currencyRequestsCountMap[currentDestinationCurrency]++;
 		}
 
-		await updateMetadata(metadataEntity)
+		await updateMetadataItem(metadataEntity)
 	}
 
 	return {
@@ -48,7 +48,27 @@ export const processMetadata =  async (
 	};
 }
 
-const getMetadata = async (): Promise<ConversionMetadataEntity | null> => {
+export const getMetaData = async (): Promise<ConversionMetadataResult> => {
+	let metadataEntity: ConversionMetadataEntity | null = await getMetadataItem();
+
+	if (!metadataEntity) {
+		return {
+			mostPopularDestinationCurrency: [],
+			totalAmount: 0,
+			totalRequests: 0
+		}
+	}
+
+	return {
+		mostPopularDestinationCurrency: getMostPopularDestinationCurrencies(
+			metadataEntity.currencyRequestsCountMap
+		),
+		totalAmount: metadataEntity.totalAmount,
+		totalRequests: metadataEntity.totalRequests
+	};
+}
+
+const getMetadataItem = async (): Promise<ConversionMetadataEntity | null> => {
 	const output = await db.get({
 		TableName: tableName,
 		Key: { id: 'metadata' },
@@ -58,7 +78,7 @@ const getMetadata = async (): Promise<ConversionMetadataEntity | null> => {
 	return output.Item ? output.Item.value : null;
 }
 
-const insertMetadata = async (conversionMetadataEntity: ConversionMetadataEntity): Promise<void> => {
+const insertMetadataItem = async (conversionMetadataEntity: ConversionMetadataEntity): Promise<void> => {
 	await db.put({
 		TableName: tableName,
 		Item: {
@@ -68,7 +88,7 @@ const insertMetadata = async (conversionMetadataEntity: ConversionMetadataEntity
 	}).promise();
 }
 
-const updateMetadata = async (conversionMetadataEntity: ConversionMetadataEntity): Promise<void> => {
+const updateMetadataItem = async (conversionMetadataEntity: ConversionMetadataEntity): Promise<void> => {
 	await db.update({
 		TableName: tableName,
 		Key: {

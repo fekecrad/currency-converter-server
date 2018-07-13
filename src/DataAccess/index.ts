@@ -1,4 +1,4 @@
 import { getUsdConversionRate } from './OxrApi';
-import { processMetadata } from './DynamoDb';
+import { getMetaData, processMetadata } from './DynamoDb';
 
-export { getUsdConversionRate, processMetadata };
+export { getMetaData, getUsdConversionRate, processMetadata };

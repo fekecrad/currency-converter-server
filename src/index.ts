@@ -1,4 +1,4 @@
-import { getUsdConversionRate, processMetadata } from './DataAccess';
+import { getMetaData, getUsdConversionRate, processMetadata } from './DataAccess';
 import { ConversionResult, Currency, ServiceResponse } from './types';
 import currencies from '../models/Currencies.json';
 import { logError } from './DataAccess/Logger';
@@ -14,7 +14,7 @@ export const executeConversionSteps = async (
 		const destinationToBaseCurrencyRate: number = usdToDestinationCurrencyRate / usdToBaseCurrencyRate;
 		const conversionResult: ConversionResult =  {
 			result: destinationToBaseCurrencyRate * amountToConvert,
-			metadata: await processMetadata(amountToConvert / usdToBaseCurrencyRate , destinationCurrency)
+			...(await processMetadata(amountToConvert / usdToBaseCurrencyRate , destinationCurrency))
 		};
 		serviceResponse = buildServiceResponse(200, conversionResult);
 	} catch (error) {
@@ -27,14 +27,15 @@ export const executeConversionSteps = async (
 	return serviceResponse;
 };
 
-export const getCurrencies = (): ServiceResponse => {
-	const result: Currency[] = Object.keys(currencies).map((code: string): Currency => ({
+export const getMetadata = async (): Promise<ServiceResponse> => {
+	const mappedCurrencies: Currency[] = Object.keys(currencies).map((code: string): Currency => ({
 		 code,
 		 name: (<any>currencies)[code]
 	}));
 	return {
 		statusCode: 200,
-		body: JSON.stringify(result),
+		body: JSON.stringify({
+			currencies: mappedCurrencies, ...(await getMetaData())}),
 		headers: {},
 		isBase64Encoded: false
 	};
