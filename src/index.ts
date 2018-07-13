@@ -1,4 +1,4 @@
-import { getUsdConversionRate } from './DataAccess/OxrApi';
+import { getUsdConversionRate, processMetadata } from './DataAccess';
 import { ConversionResult, ServiceResponse, Currency } from './types';
 import currencies from '../models/Currencies.json';
 
@@ -7,16 +7,12 @@ export const executeConversionSteps = async (
 	baseCurrency: string,
 	destinationCurrency: string
 ): Promise<ServiceResponse> => {
-	const { usdToBaseCurrencyRate, usdToDestinationCurrencyRate } = await getUsdConversionRate(baseCurrency, destinationCurrency);
-	const destinationToBaseCurrencyRate: number = usdToDestinationCurrencyRate / usdToBaseCurrencyRate;
+	// const { usdToBaseCurrencyRate, usdToDestinationCurrencyRate } = await getUsdConversionRate(baseCurrency, destinationCurrency);
+	// const destinationToBaseCurrencyRate: number = usdToDestinationCurrencyRate / usdToBaseCurrencyRate;
 
 	const conversionResult: ConversionResult =  {
-		result: destinationToBaseCurrencyRate * amountToConvert,
-		metadata: {
-			amountConvertedInUsd: 0,
-			mostPopularDestinationCurrency: '',
-			numberOfConversionRequestsMade: 0
-		}
+		result: 1,
+		metadata: await processMetadata(/* destinationToBaseCurrencyRate * amountToConvert */ 10, destinationCurrency)
 	};
 
 	const response: ServiceResponse = {

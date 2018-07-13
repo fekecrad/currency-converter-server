@@ -7,14 +7,17 @@
 	"devDependencies": {
 		"@types/aws-lambda": "^8.10.7",
 		"serverless": "^1.28.0",
+		"serverless-dynamodb-local": "^0.2.30",
 		"serverless-offline": "^3.25.6",
 		"serverless-plugin-typescript": "^1.1.5",
 		"tslint": "^5.10.0"
 	},
 	"dependencies": {
+		"@types/aws-sdk": "^2.7.0",
 		"@types/node": "^10.5.2",
 		"axios": "^0.18.0",
 		"serverless-aws-documentation": "^1.1.0",
+		"serverless-dynamodb-client": "^0.0.2",
 		"serverless-reqvalidator-plugin": "^1.0.2"
 	},
 	"scripts": {

@@ -1,17 +1,27 @@
+export interface ConversionMetadataEntity {
+	totalRequests: number,
+	totalAmount: number,
+	currencyRequestsCountMap: CurrencyRequestsCountMap
+}
+
+export interface ConversionMetadataResult {
+	mostPopularDestinationCurrency: string[];
+	totalAmount: number;
+	totalRequests: number;
+}
+
+export interface ConversionResult {
+	result: number,
+	metadata: ConversionMetadataResult;
+}
+
 export interface Currency {
 	code: string,
 	name: string
 }
 
-export interface ConversionResult {
-	result: number,
-	metadata: ConversionMetadata;
-}
-
-export interface ConversionMetadata {
-	mostPopularDestinationCurrency: string;
-	amountConvertedInUsd: number;
-	numberOfConversionRequestsMade: number;
+export interface CurrencyRequestsCountMap {
+	[code: string]: number
 }
 
 export interface ServiceResponse {

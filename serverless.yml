@@ -5,6 +5,13 @@ provider:
   region: eu-west-1
   stage: ${opt:stage, 'dev'}
   environment: ${file(./serverless.env.yml):${self:provider.stage}}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/currencyConverterMetaData"
 functions:
   convert:
     handler: handler.convert
@@ -27,8 +34,9 @@ functions:
           path: currencies
           method: get
 plugins:
-  - serverless-plugin-typescript
+  - serverless-dynamodb-local
   - serverless-offline
+  - serverless-plugin-typescript
   - serverless-reqvalidator-plugin
   - serverless-aws-documentation
 custom:
@@ -42,6 +50,13 @@ custom:
       - name: ConvertRequest
         contentType: application/json
         schema: ${file(models/ConvertRequestSchema.json)}
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: false
+      noStart: true
 resources:
   Resources:
     ConvertRequestValidator:
@@ -52,3 +67,17 @@ resources:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
         ValidateRequestParameters: false
+    currencyConverterMetaDataTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: currencyConverterMetaData
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
