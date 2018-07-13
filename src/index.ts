@@ -8,15 +8,13 @@ export const executeConversionSteps = async (
 	baseCurrency: string,
 	destinationCurrency: string
 ): Promise<ServiceResponse> => {
-	// const { usdToBaseCurrencyRate, usdToDestinationCurrencyRate } = await getUsdConversionRate(baseCurrency, destinationCurrency);
-	// const destinationToBaseCurrencyRate: number = usdToDestinationCurrencyRate / usdToBaseCurrencyRate;
-
 	let serviceResponse: ServiceResponse;
-
 	try {
+		const { usdToBaseCurrencyRate, usdToDestinationCurrencyRate } = await getUsdConversionRate(baseCurrency, destinationCurrency);
+		const destinationToBaseCurrencyRate: number = usdToDestinationCurrencyRate / usdToBaseCurrencyRate;
 		const conversionResult: ConversionResult =  {
-			result: 1,
-			metadata: await processMetadata(/* destinationToBaseCurrencyRate * amountToConvert */ 10, destinationCurrency)
+			result: destinationToBaseCurrencyRate * amountToConvert,
+			metadata: await processMetadata(amountToConvert / usdToBaseCurrencyRate , destinationCurrency)
 		};
 		serviceResponse = buildServiceResponse(200, conversionResult);
 	} catch (error) {
