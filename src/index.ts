@@ -1,6 +1,7 @@
 import { getUsdConversionRate, processMetadata } from './DataAccess';
-import { ConversionResult, ServiceResponse, Currency } from './types';
+import { ConversionResult, Currency, ServiceResponse } from './types';
 import currencies from '../models/Currencies.json';
+import { logError } from './DataAccess/Logger';
 
 export const executeConversionSteps = async (
 	amountToConvert: number,
@@ -10,19 +11,22 @@ export const executeConversionSteps = async (
 	// const { usdToBaseCurrencyRate, usdToDestinationCurrencyRate } = await getUsdConversionRate(baseCurrency, destinationCurrency);
 	// const destinationToBaseCurrencyRate: number = usdToDestinationCurrencyRate / usdToBaseCurrencyRate;
 
-	const conversionResult: ConversionResult =  {
-		result: 1,
-		metadata: await processMetadata(/* destinationToBaseCurrencyRate * amountToConvert */ 10, destinationCurrency)
-	};
+	let serviceResponse: ServiceResponse;
 
-	const response: ServiceResponse = {
-		statusCode: 200,
-		body: JSON.stringify(conversionResult),
-		headers: {},
-		isBase64Encoded: false
+	try {
+		const conversionResult: ConversionResult =  {
+			result: 1,
+			metadata: await processMetadata(/* destinationToBaseCurrencyRate * amountToConvert */ 10, destinationCurrency)
+		};
+		serviceResponse = buildServiceResponse(200, conversionResult);
+	} catch (error) {
+		logError(error);
+		serviceResponse = buildServiceResponse(500, {
+			error: 'Internal Server Error',
+		});
 	}
 
-	return response;
+	return serviceResponse;
 };
 
 export const getCurrencies = (): ServiceResponse => {
@@ -37,3 +41,10 @@ export const getCurrencies = (): ServiceResponse => {
 		isBase64Encoded: false
 	};
 }
+
+const buildServiceResponse = (statusCode: number, body: any): ServiceResponse => ({
+	statusCode,
+	body: JSON.stringify(body),
+	headers: {},
+	isBase64Encoded: false
+})
