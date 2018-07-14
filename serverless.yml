@@ -19,6 +19,7 @@ functions:
       - http:
           path: convert
           method: post
+          cors: true
           documentation:
             summary: Convert endpoint
             description: Documentation & naming is hard
@@ -33,6 +34,7 @@ functions:
       - http:
           path: metadata
           method: get
+          cors: true
 plugins:
   - serverless-dynamodb-local
   - serverless-offline

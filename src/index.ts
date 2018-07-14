@@ -32,18 +32,18 @@ export const getMetadata = async (): Promise<ServiceResponse> => {
 		 code,
 		 name: (<any>currencies)[code]
 	}));
-	return {
-		statusCode: 200,
-		body: JSON.stringify({
-			currencies: mappedCurrencies, ...(await getMetaData())}),
-		headers: {},
-		isBase64Encoded: false
-	};
+
+	return buildServiceResponse(200, {
+		currencies: mappedCurrencies, ...(await getMetaData())
+	})
 }
 
 const buildServiceResponse = (statusCode: number, body: any): ServiceResponse => ({
 	statusCode,
 	body: JSON.stringify(body),
-	headers: {},
+	headers: {
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Credentials': true
+	},
 	isBase64Encoded: false
 })
