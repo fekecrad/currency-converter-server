@@ -1,0 +1,15 @@
+{
+	"extends": [
+		"tslint:recommended"
+	],
+	"linterOptions": {
+		"exclude": [
+			"node_modules/**/*.ts"
+		]
+	},
+	"rules": {
+		"interface-name" : [true, "never-prefix"],
+		"no-unused-expression": false,
+		"no-console": false
+	}
+}
