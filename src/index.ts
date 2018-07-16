@@ -28,14 +28,24 @@ export const executeConversionSteps = async (
 };
 
 export const getMetadata = async (): Promise<ServiceResponse> => {
-	const mappedCurrencies: Currency[] = Object.keys(currencies).map((code: string): Currency => ({
-		 code,
-		 name: (<any>currencies)[code]
-	}));
+	let serviceResponse: ServiceResponse;
+	try {
+		const mappedCurrencies: Currency[] = Object.keys(currencies).map((code: string): Currency => ({
+			code,
+			name: (<any>currencies)[code]
+		}));
 
-	return buildServiceResponse(200, {
-		currencies: mappedCurrencies, ...(await getMetaData())
-	})
+		serviceResponse =  buildServiceResponse(200, {
+			currencies: mappedCurrencies, ...(await getMetaData())
+		});
+	} catch (error) {
+		logError(error);
+		serviceResponse = buildServiceResponse(500, {
+			error: 'Internal Server Error',
+		});
+	}
+
+	return serviceResponse;
 }
 
 const buildServiceResponse = (statusCode: number, body: any): ServiceResponse => ({
