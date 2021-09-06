@@ -15,7 +15,7 @@
   "dependencies": {
     "@types/aws-sdk": "^2.7.0",
     "@types/node": "^10.5.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.3",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-dynamodb-client": "^0.0.2",
     "serverless-reqvalidator-plugin": "^1.0.2",
