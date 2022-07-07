@@ -1778,8 +1778,8 @@ minimist@^1.2.0:
     minimist "0.0.8"
 
 moment@2.x.x, moment@^2.13.0:
-  version "2.22.2"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
 
 ms@2.0.0:
   version "2.0.0"
@@ -2380,6 +2380,10 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
+
+snyk@^1.161.1:
+  version "1.964.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.964.0.tgz#81d0f7121a3471751f2ef90fdc9ac3e65ac696cd"
 
 source-map-support@^0.4.15:
   version "0.4.18"
